@@ -11,7 +11,7 @@ async function setupServer(){
     try {
         const app = express(); //instanciar express
         app.use(json()); // Middleware para manejar peticiones http al servidor con JSON
-        app.use('/api',indexRoutes) //rutas a manejar
+        app.use('/api',indexRoutes); //rutas a manejar
         app.listen(PORT,()=>{
             console.log(`servidor corriendo en http://${HOST}:${PORT}/api`);
         });
@@ -21,7 +21,7 @@ async function setupServer(){
     }
 }
 
-//funcion asincrona para monstar setup de la api que nos permite la conexion entre componentes de la app
+//funcion asincrona para montar setup de la api que nos permite la conexion entre componentes de la app (bbdd y server)
 
 async function setupAPI(){
     try {

@@ -1,9 +1,9 @@
-'use strict';
-import {fileURLtoPath} from "url";
+"use strict";
+import {fileURLToPath} from "url";
 import path from 'path';
 import dotenv from 'dotenv';
 
-const _filename = fileURLtoPath(import.meta.url); // ruta de mi archivo configEnv
+const _filename = fileURLToPath(import.meta.url); // ruta de mi archivo configEnv
 const _dirname = path.dirname(_filename); // ruta de mi directorio donde esta el configEnv
 
 //ruta donde se encuentra mi archivo .env
