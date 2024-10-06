@@ -87,3 +87,69 @@ export async function getUser(req,res){
 
 
 //IMPLEMENTAR UPDATE USER Y DELETE USER
+
+/*export async function deleteUser(req,res){
+    try {
+        const userRepository = AppDataSource.getRepository(User);
+        const id = req.params.id;
+        const userFound = await userRepository.findOne({
+            where: {
+                id: id
+            }
+        })
+        if(!userFound) {
+            return res.status(404).json({
+                message: 'usuario no encontrado',
+                data : null
+            })
+        }
+        const delUser = await userRepository.delete({
+            id: id
+        })
+       
+        
+    } catch (error) {
+        console.error("Error al eliminar usuario:\n ",error);
+    }
+}*/
+
+export async function updateUser(res,req){
+    try {
+        const userRepository = AppDataSource.getRepository(User);
+        const id = req.params.id;//almacenamos id de usuario especificado en request
+        console.log(`id del usuario a actualizar : ${id}`);
+        const user = req.body; // almacenamos en user todo lo que viene en la request
+        
+        //guardamos usuario que que queremos actualizar (coincide con id que pasamos en request)
+        const userFound = await userRepository.findOne({
+            where: {
+                id: id
+            }
+        });
+        
+        //Si el usuario a actualizar no existe
+        if(!userFound) {
+            return res.status(404).json({
+                message: 'usuario no encontrado',
+                data : null
+            });
+        }
+
+        //En caso exitoso de busqueda seleccionamos el usuario con id especificada y actualizamos su contenido (user)
+        await userRepository.update(id,user);
+
+        const userData = await userRepository.findOne({
+            where: [{
+                id: id
+            }]
+        });
+
+        res.status(200).json({
+            message: 'usuario actualizado correctamente',
+            data: userData
+        });
+    } catch (error) {
+        console.error('error al actualizar el error: ',error);   
+        
+    }
+}
