@@ -54,6 +54,7 @@ export async function getUsers(req,res){
             message: 'Usuarios encontrados',
             data: users
         })
+        
     } catch (error) {
         console.error("Error al obtener usuarios: ",error);
     }
@@ -88,7 +89,7 @@ export async function getUser(req,res){
 
 //IMPLEMENTAR UPDATE USER Y DELETE USER
 
-/*export async function deleteUser(req,res){
+export async function deleteUser(req,res){
     try {
         const userRepository = AppDataSource.getRepository(User);
         const id = req.params.id;
@@ -103,21 +104,21 @@ export async function getUser(req,res){
                 data : null
             })
         }
-        const delUser = await userRepository.delete({
-            id: id
-        })
-       
+        const delUser = await userRepository.remove(userFound);
+        return res.status(200).json({
+            message:  "Usuario eliminado exitosamente",
+            data: delUser
+        });
         
     } catch (error) {
         console.error("Error al eliminar usuario:\n ",error);
-    }
-}*/
+        res.status(500).json({message : "Error interno en el servidor"});    }  
+}
 
-export async function updateUser(res,req){
+export async function updateUser(req,res){
     try {
         const userRepository = AppDataSource.getRepository(User);
         const id = req.params.id;//almacenamos id de usuario especificado en request
-        console.log(`id del usuario a actualizar : ${id}`);
         const user = req.body; // almacenamos en user todo lo que viene en la request
         
         //guardamos usuario que que queremos actualizar (coincide con id que pasamos en request)
@@ -126,6 +127,7 @@ export async function updateUser(res,req){
                 id: id
             }
         });
+       
         
         //Si el usuario a actualizar no existe
         if(!userFound) {
@@ -148,6 +150,7 @@ export async function updateUser(res,req){
             message: 'usuario actualizado correctamente',
             data: userData
         });
+
     } catch (error) {
         console.error('error al actualizar el error: ',error);   
         
