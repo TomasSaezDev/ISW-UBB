@@ -11,7 +11,7 @@ async function setupServer(){
     try {
         const app = express(); //instanciar express
         app.use(json()); // Middleware para manejar peticiones http al servidor con JSON
-        app.use('/api',indexRoutes); //rutas a manejar
+        app.use('/api',indexRoutes); //maneja de rutas 
         app.listen(PORT,()=>{
             console.log(`servidor corriendo en http://${HOST}:${PORT}/api`);
         });
