@@ -3,6 +3,7 @@
 "use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configBd.js";
+import { userSchemaValidator } from "../validations/user.validation.js";
 
 //FUNCIONES PARA INTERACTUAR (createUser,getUsers,getUser)
 
@@ -13,7 +14,17 @@ export async function createUser(req,res){
         const userRepository = AppDataSource.getRepository(User);
         //almacenar en user todo lo que enviemos en nuestra peticion
         const user = req.body;
-        if(!user){
+        //aplicamos desestructuracion para capturar valor valido o invalido 
+        const {value,error} = userSchemaValidator.validate(user);
+        
+        //Si nos devuelve error en la validacion entonces
+        if(error) {
+            return res.status(400).json({
+                message : error.message
+            })
+        }
+
+        if(!value){
             return res.status(400).json({
                 message : 'Es necesario ingresar los datos del usuario',
                 data:null
@@ -120,7 +131,12 @@ export async function updateUser(req,res){
         const userRepository = AppDataSource.getRepository(User);
         const id = req.params.id;//almacenamos id de usuario especificado en request
         const user = req.body; // almacenamos en user todo lo que viene en la request
-        
+        const {value,error} = userSchemaValidator.validate(user);
+        if(error){
+            return res.status(400).json({
+                message: error.message
+            })
+        }
         //guardamos usuario que que queremos actualizar (coincide con id que pasamos en request)
         const userFound = await userRepository.findOne({
             where: {
