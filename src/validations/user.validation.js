@@ -39,7 +39,7 @@ export const userSchemaValidator = Joi.object({
     xx.xxx.xxx | x.xxx.xxx o la opcion sin punto digito 1-9 seguido de 6 numeros o digito 1-2 seguido de 7
     luego sigue un guion en cualquiera opcion y luego un numero del 1-9 o k-K.
      */
-    .pattern(new RegExp('^(?:(?:[1-9]\d{0}|[1-2]\d{1})(\.\d{3}){2}|[1-9]\d{6}|[1-2]\d{7})-[\dkK]$'))
+    .pattern(new RegExp(/^(?:(?:[1-9]\d{0}|[1-2]\d{1})(\.\d{3}){2}|[1-9]\d{6}|[1-2]\d{7})-[\dkK]$/))
     .required()
     .messages({
         'string.empty' : 'El rut no puede estar vacio.',

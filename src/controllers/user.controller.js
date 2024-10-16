@@ -137,6 +137,14 @@ export async function updateUser(req,res){
                 message: error.message
             })
         }
+
+        if(!value){
+            return res.status(400).json({
+                message : 'Es necesario ingresar los datos del usuario',
+                data:null
+            })
+        }
+        
         //guardamos usuario que que queremos actualizar (coincide con id que pasamos en request)
         const userFound = await userRepository.findOne({
             where: {
