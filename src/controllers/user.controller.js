@@ -4,14 +4,14 @@
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configBd.js";
 import { userSchemaValidator } from "../validations/user.validation.js";
+import { createUserService } from "../services/user.service.js";
 
 //FUNCIONES PARA INTERACTUAR (createUser,getUsers,getUser)
 
 //POST -> crear nuevo usuario
 export async function createUser(req,res){
     try {
-        //Instancia que permite interactuar con mi entidad de usuario
-        const userRepository = AppDataSource.getRepository(User);
+       
         //almacenar en user todo lo que enviemos en nuestra peticion
         const user = req.body;
         //aplicamos desestructuracion para capturar valor valido o invalido 
@@ -24,25 +24,11 @@ export async function createUser(req,res){
             })
         }
 
-        if(!value){
-            return res.status(400).json({
-                message : 'Es necesario ingresar los datos del usuario',
-                data:null
-            })
-        }
-        //Creamos nuevo usuario con datos enviados en la peticion
-        const newUser = userRepository.create({
-            nombre : user.nombre,
-            rut : user.rut,
-            email : user.email
-        });
-
-        //Agregar nuevo usuario a la base de datos
-        const userSaved = await userRepository.save(newUser);
         res.status(201).json({
             message: 'usuario creado exitosamente',
             data: userSaved
         });
+        const userSaved = await createUserService(value);
 
     } catch (error) {
         console.error("Error al crear un usuario: ",error);
@@ -138,12 +124,6 @@ export async function updateUser(req,res){
             })
         }
 
-        if(!value){
-            return res.status(400).json({
-                message : 'Es necesario ingresar los datos del usuario',
-                data:null
-            })
-        }
         
         //guardamos usuario que que queremos actualizar (coincide con id que pasamos en request)
         const userFound = await userRepository.findOne({
